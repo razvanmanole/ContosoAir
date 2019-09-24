@@ -22,7 +22,9 @@ steps:
 
 - script: |
     npm install --production
-  displayName: 'npm install'
+    npm build
+    npm test
+  displayName: 'npm install and Build'
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
@@ -36,13 +38,3 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
-- task: AzureResourceGroupDeployment@2
-  inputs:
-    azureSubscription: 'Microsoft Partner Network (6de167de-c89d-44e4-8d1a-d441cb3f8f07)'
-    action: 'Create Or Update Resource Group'
-    resourceGroupName: 'demo-rg'
-    location: 'West Europe'
-    templateLocation: 'Linked artifact'
-    csmFile: '$(build.artifactstagingdirectory)/Templates/azuredeploy.json'
-    csmParametersFile: '$(build.artifactstagingdirectory)/Templates/azuredeploy.parameters.json'
-    deploymentMode: 'Complete'
